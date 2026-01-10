@@ -1,0 +1,27 @@
+---
+interface Props {
+	title: string;
+}
+const { title } = Astro.props;
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import "../styles/global.css";
+
+---
+
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{title}</title>
+	</head>
+	<body class="min-h-screen bg-gradient-to-b from-[#1f5fd1] via-[#1648a6] to-[#0d3278] text-white antialiased">
+		<div class="mx-auto flex min-h-screen max-w-5xl flex-col gap-12 px-6 py-10">
+			<Header />
+			<main class="flex-1">
+				<slot /> </main>
+			<Footer />
+		</div>
+	</body>
+</html>

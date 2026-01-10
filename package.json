@@ -1,11 +1,16 @@
 {
-  "dependencies": {
-    "@tailwindcss/cli": "^4.1.17",
-    "tailwindcss": "^4.1.17"
+  "name": "notely-ch",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-    "scripts": {
-    "watch:css": "npx @tailwindcss/cli -i ./src/input.css -o ./dist/output.css --watch",
-    "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./dist/output.css"
-
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.8",
+    "tailwindcss": "^4.1.18"
   }
 }

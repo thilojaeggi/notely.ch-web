@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Notely Support">
+    <div class="mx-auto max-w-3xl space-y-12 py-2">
+        <header class="space-y-4 text-center">
+            <a class="inline-flex items-center justify-center gap-2 text-sm text-white/80 hover:text-white" href="/">
+                ← Zurück zur Startseite
+            </a>
+            <div class="space-y-3">
+                <p class="inline-flex items-center justify-center rounded-full bg-white/20 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">Notely Support</p>
+                <h1 class="text-4xl font-semibold">Support kontaktieren</h1>
+            </div>
+        </header>
+
+
+        <form id="support-form" class="space-y-6 rounded-3xl border border-white/20 bg-white p-8 text-slate-900 shadow-[0_25px_70px_rgba(6,24,60,0.3)]">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700" for="name">Name</label>
+                <input class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-sky-400 focus:outline-none" id="name" name="name" type="text" placeholder="Dein Name">
+            </div>
+            <div class="grid gap-6 md:grid-cols-2">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700" for="subject">Betreff</label>
+                    <input class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-sky-400 focus:outline-none" id="subject" name="subject" type="text" placeholder="Kurzbeschreibung" maxlength="50" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700" for="school">Schule</label>
+                    <select class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-sky-400 focus:outline-none" id="school" name="school" required>
+                        <option value="" disabled selected>Wähle deine Schule</option>
+                        <option>Kanti Solothurn</option>
+                        <option>GIBS Solothurn</option>
+                        <option>KBS Solothurn</option>
+                        <option>GIBS Grenchen</option>
+                        <option>GIBS Olten</option>
+                        <option>Kanti Olten</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700" for="topic">Thema</label>
+                <select class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-sky-400 focus:outline-none" id="topic" name="topic">
+                    <option>Allgemeine Frage</option>
+                    <option>Technisches Problem</option>
+                    <option>Feature-Wunsch</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700" for="message">Nachricht</label>
+                <textarea class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-sky-400 focus:outline-none" id="message" name="message" rows="5" placeholder="Beschreibe dein Anliegen…" required></textarea>
+            </div>
+            <button class="w-full rounded-2xl bg-[#0d2f6d] px-5 py-3 text-base font-semibold text-white shadow-lg shadow-sky-900/30 transition hover:bg-[#103a84]" type="submit">
+                Nachricht senden
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('support-form') as HTMLFormElement;
+        form?.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const data = new FormData(form);
+            // ... your existing mailto logic ...
+            window.location.href = `mailto:support@notely.ch?subject=${subject}&body=${body}`;
+        });
+    </script>
+</Layout>
