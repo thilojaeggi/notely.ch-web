@@ -1,86 +1,127 @@
 <header class="flex items-center justify-between">
     <div class="flex items-center gap-3">
-        <img src="/img/icon.png" alt="Notely app icon" class="block size-12 drop-shadow-[0_12px_25px_rgba(7,18,48,0.55)]" />
+        <img
+            src="/img/icon.png"
+            alt="Notely app icon"
+            class="block size-12 drop-shadow-[0_12px_25px_rgba(7,18,48,0.55)]"
+        />
         <div>
             <p class="text-lg font-semibold">Notely | Kaschuso</p>
         </div>
     </div>
     <nav class="flex items-center gap-4 text-sm font-medium text-white/90">
-        <a id="status-link" href="https://status.notely.ch" target="_blank" class="group flex items-center gap-2 rounded-full px-3 py-1 transition-all duration-500 hover:bg-white/10 w-fit overflow-hidden whitespace-nowrap ease-in-out">
-            <span id="status-dot" class="size-2 shrink-0 rounded-full bg-current animate-pulse"></span>
+        <a
+            id="status-link"
+            href="https://status.notely.ch"
+            target="_blank"
+            class="group flex items-center gap-2 rounded-full px-3 py-1 transition-all duration-500 hover:bg-white/10 w-fit overflow-hidden whitespace-nowrap ease-in-out"
+        >
+            <span
+                id="status-dot"
+                class="size-2 shrink-0 rounded-full bg-current animate-pulse"
+            ></span>
             <span id="status-text" class="text-xs font-medium">Status</span>
-            <span id="status-action" class="max-w-0 opacity-0 transition-all duration-500 ease-in-out group-hover:max-w-[200px] group-hover:opacity-100 group-hover:ml-1 text-xs font-normal">
+            <span
+                id="status-action"
+                class="max-w-0 opacity-0 transition-all duration-500 ease-in-out group-hover:max-w-[200px] group-hover:opacity-100 group-hover:ml-1 text-xs font-normal"
+            >
                 <span class="pl-1">→ Gehe zur Statusseite</span>
             </span>
         </a>
 
         <a class="hover:text-white" href="/">Start</a>
         <a class="hover:text-white" href="/support">Support</a>
-        <a class="rounded-full bg-white px-5 py-2 text-black shadow-md shadow-black/10 transition-colors hover:bg-white/90" href="https://web.notely.ch">Anmelden</a>
+        <a
+            class="rounded-full bg-white px-5 py-2 text-black shadow-md shadow-black/10 transition-colors hover:bg-white/90"
+            href="https://web.notely.ch">Anmelden</a
+        >
     </nav>
 </header>
 
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    const statusLink = document.getElementById('status-link');
-    const statusDot = document.getElementById('status-dot');
-    const statusText = document.getElementById('status-text');
+    document.addEventListener("DOMContentLoaded", async () => {
+        const statusLink = document.getElementById("status-link");
+        const statusDot = document.getElementById("status-dot");
+        const statusText = document.getElementById("status-text");
 
-    if (!statusLink || !statusDot || !statusText) return;
+        if (!statusLink || !statusDot || !statusText) return;
 
-    // Use corsproxy.io to bypass CORS issues on localhost/web
-    const statusUrl = 'https://corsproxy.io/?url=' + encodeURIComponent('https://status.notely.ch/api/status-page/heartbeat/notely');
+        // Use corsproxy.io to bypass CORS issues on localhost/web
+        const statusUrl =
+            "https://corsproxy.io/?url=" +
+            encodeURIComponent(
+                "https://status.notely.ch/api/status-page/heartbeat/notely",
+            );
 
-    try {
-        const response = await fetch(statusUrl);
-        if (!response.ok) throw new Error('Network response was not ok');
+        try {
+            const response = await fetch(statusUrl);
+            if (!response.ok) throw new Error("Network response was not ok");
 
-        const data = await response.json();
-        const heartbeats = data.heartbeatList && data.heartbeatList["1"];
+            const data = await response.json();
+            const heartbeats = data.heartbeatList && data.heartbeatList["3"];
 
-        let isOnline = true;
+            let isOnline = true;
 
-        if (heartbeats && Array.isArray(heartbeats) && heartbeats.length > 0) {
-            const latest = heartbeats[heartbeats.length - 1];
-            isOnline = latest.status === 1;
-        } else {
-            console.log("Status: Heartbeat list empty, assuming online.");
+            if (
+                heartbeats &&
+                Array.isArray(heartbeats) &&
+                heartbeats.length > 0
+            ) {
+                const latest = heartbeats[heartbeats.length - 1];
+                isOnline = latest.status === 1;
+            } else {
+                console.log("Status: Heartbeat list empty, assuming online.");
+            }
+
+            // Apply styles based on status
+            if (isOnline) {
+                // Online: Subtle, green dot
+                statusLink.classList.add(
+                    "text-green-300",
+                    "bg-green-500/10",
+                    "border",
+                    "border-green-500/20",
+                );
+                statusDot.classList.add("bg-green-400");
+                statusText.textContent = "Anmeldung: Online";
+                statusText.classList.remove("font-bold", "text-base");
+            } else {
+                // Offline/Issues: Bigger, red, noticeable
+                statusLink.classList.add(
+                    "bg-red-600",
+                    "text-white",
+                    "shadow-lg",
+                    "scale-110",
+                    "font-bold",
+                    "animate-pulse",
+                );
+                statusLink.classList.remove(
+                    "px-3",
+                    "py-1",
+                    "hover:bg-white/10",
+                ); // reset default sizing/hover
+                statusLink.classList.add("px-4", "py-2"); // bigger padding
+
+                statusDot.classList.add("bg-white"); // White dot on red background
+                statusText.textContent = "Anmeldung: Störung";
+
+                // On hover it already acts as a button (href)
+                // But user asked for "on hover have a button"
+                // The whole pill is the button.
+            }
+        } catch (error) {
+            console.error("Failed to fetch status:", error);
+            // Fallback or hide if failed?
+            // Best to just hide or show unknown
+            // For now, let's show it as "Unknown" or just hide it to avoid confusion?
+            // User implied "if its not green it should be bigger". Unknown is not green.
+            // But invalid data != outage.
+            // Let's keep it hidden if fetch fails, or show gray.
+            return; // Keep hidden
         }
 
-        // Apply styles based on status
-        if (isOnline) {
-            // Online: Subtle, green dot
-            statusLink.classList.add('text-green-300', 'bg-green-500/10', 'border', 'border-green-500/20');
-            statusDot.classList.add('bg-green-400');
-            statusText.textContent = "Anmeldung: Online";
-            statusText.classList.remove('font-bold', 'text-base');
-        } else {
-            // Offline/Issues: Bigger, red, noticeable
-            statusLink.classList.add('bg-red-600', 'text-white', 'shadow-lg', 'scale-110', 'font-bold', 'animate-pulse');
-            statusLink.classList.remove('px-3', 'py-1', 'hover:bg-white/10'); // reset default sizing/hover
-            statusLink.classList.add('px-4', 'py-2'); // bigger padding
-
-            statusDot.classList.add('bg-white'); // White dot on red background
-            statusText.textContent = "Anmeldung: Störung";
-
-            // On hover it already acts as a button (href)
-            // But user asked for "on hover have a button"
-            // The whole pill is the button.
-        }
-
-    } catch (error) {
-        console.error("Failed to fetch status:", error);
-        // Fallback or hide if failed? 
-        // Best to just hide or show unknown
-        // For now, let's show it as "Unknown" or just hide it to avoid confusion?
-        // User implied "if its not green it should be bigger". Unknown is not green.
-        // But invalid data != outage.
-        // Let's keep it hidden if fetch fails, or show gray.
-        return; // Keep hidden
-    }
-
-    // Reveal
-    statusLink.classList.remove('hidden');
-    statusLink.classList.add('flex');
-});
+        // Reveal
+        statusLink.classList.remove("hidden");
+        statusLink.classList.add("flex");
+    });
 </script>
