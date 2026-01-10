@@ -48,10 +48,7 @@
 
         // Use corsproxy.io to bypass CORS issues on localhost/web
         const statusUrl =
-            "https://corsproxy.io/?url=" +
-            encodeURIComponent(
-                "https://status.notely.ch/api/status-page/heartbeat/notely",
-            );
+            "https://status.notely.ch/api/status-page/heartbeat/notely";
 
         try {
             const response = await fetch(statusUrl);
